@@ -4,10 +4,10 @@
             [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [taoensso.timbre :as log]
-            [status-im.ui.components.react :refer [view
+            [status-im.ui.components.react :refer [view]
                                                 text
                                                 icon
-                                                touchable-highlight]]
+                                                touchable-highlight]
             [status-im.chat.styles.input.input-actions :as style]))
 
 (defmulti action-view (fn [{:keys [type]}] (keyword type)))
@@ -33,10 +33,10 @@
        {:on-press #(.goBack @webview)}
        [view (style/action-view true)
         [icon :action_back style/action-view-icon-tinted]]]
-      #_(if (:can-go-back? @result-box)
+      #_(if (:can-go-back? @result-box))
 
         [view (style/action-view false)
-         [icon :action_back style/action-view-icon]]))))
+         [icon :action_back style/action-view-icon]])))
 
 (defmethod action-view :web-view-forward
   [_]
@@ -47,16 +47,16 @@
        {:on-press #(.goForward @webview)}
        [view (style/action-view true)
         [icon :action_forward style/action-view-icon-tinted]]]
-      #_(if (:can-go-forward? @result-box)
+      #_(if (:can-go-forward? @result-box))
 
         [view (style/action-view false)
-         [icon :action_forward style/action-view-icon]]))))
+         [icon :action_forward style/action-view-icon]])))
 
 (defmethod action-view :default
   [{:keys [image executeJs]}]
   [touchable-highlight
-   {:on-press #(dispatch [:send-to-webview-bridge {:event "actions-execute-js"
-                                                   :js    executeJs}])}
+   {:on-press #(dispatch [:chat-webview-bridge/send-to-bridge {:event "actions-execute-js"
+                                                               :js    executeJs}])}
    [view (style/action-view true)
     [icon (str "action_" image) style/action-view-icon]]])
 
